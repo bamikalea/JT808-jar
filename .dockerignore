@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Maven
+target/
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Documentation
+协议文档/
+README.md
+LICENSE
+
+# Test files
+**/test/
+**/tests/
+
+# Build artifacts
+node_modules/
+dist/
+build/ 
