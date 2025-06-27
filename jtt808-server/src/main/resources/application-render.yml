@@ -2,14 +2,14 @@ spring:
   application:
     name: jt808
   datasource:
-    url: ${DATABASE_URL:jdbc:h2:file:./data/jt;auto_server=true;ignorecase=true;mode=mysql}
-    username: ${DATABASE_USERNAME:root}
-    password: ${DATABASE_PASSWORD:123}
+    url: jdbc:h2:file:./data/jt;auto_server=true;ignorecase=true;mode=mysql
+    username: root
+    password: 123
     driver-class-name: org.h2.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
-      minimum-idle: 2
-      maximum-pool-size: 4
+      minimum-idle: 8
+      maximum-pool-size: 8
       transaction-isolation: TRANSACTION_READ_COMMITTED
       data-source-properties:
         useSSL: false
@@ -21,8 +21,8 @@ spring:
         cachePrepStmts: true
         cacheResultSetMetadata: true
         cacheServerConfiguration: true
-        prepStmtCacheSize: 32
-        prepStmtCacheSqlLimit: 32768
+        prepStmtCacheSize: 64
+        prepStmtCacheSqlLimit: 65535
         useServerPrepStmts: true
         useLocalTransactionState: true
         useLocalSessionState: true
@@ -53,24 +53,6 @@ mybatis:
 server:
   port: ${PORT:8100}
 
-jt-server:
-  jt808:
-    enable: true
-    port:
-      udp: ${JT808_UDP_PORT:7100}
-      tcp: ${JT808_TCP_PORT:7100}
-    media-file:
-      path: ./data/media_file
-    alarm-file:
-      host: 127.0.0.1
-      port: 7200
-
-  alarm-file:
-    enable: false
-    port: 7200
-    path: ./data/alarm_file
-
-# Management endpoints for health checks
 management:
   endpoints:
     web:
@@ -78,4 +60,21 @@ management:
         include: health,info,metrics
   endpoint:
     health:
-      show-details: when-authorized
+      show-details: always
+
+jt-server:
+  jt808:
+    enable: true
+    port:
+      udp: 7100
+      tcp: 7100
+    media-file:
+      path: ./data/media_file
+    alarm-file:
+      host: 0.0.0.0
+      port: 7200
+
+  alarm-file:
+    enable: true
+    port: 7200
+    path: ./data/alarm_file
