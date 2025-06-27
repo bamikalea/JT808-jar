@@ -4,8 +4,8 @@ FROM openjdk:17-jdk-slim
 # Set working directory
 WORKDIR /app
 
-# Install Maven
-RUN apt-get update && apt-get install -y maven
+# Install Maven and curl for health checks
+RUN apt-get update && apt-get install -y maven curl && rm -rf /var/lib/apt/lists/*
 
 # Copy pom.xml files first for better caching
 COPY pom.xml ./
@@ -13,14 +13,11 @@ COPY commons/pom.xml ./commons/
 COPY jtt808-protocol/pom.xml ./jtt808-protocol/
 COPY jtt808-server/pom.xml ./jtt808-server/
 
-# Download dependencies
-RUN mvn dependency:go-offline -B
-
 # Copy source code
 COPY . .
 
-# Build the application
-RUN mvn clean package -DskipTests
+# Build the application (skip dependency resolution step that causes issues)
+RUN mvn clean package -DskipTests -B
 
 # Create data directory for H2 database
 RUN mkdir -p /app/data
